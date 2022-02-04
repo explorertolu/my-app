@@ -135,16 +135,32 @@ jobs:
         dockerfiles: |
           ./Dockerfile
 
-    # https://github.com/redhat-actions/push-to-registry#readme
-    - name: Push to registry
-      id: push-image
-      uses: redhat-actions/push-to-registry@v2
-      with:
-        image: ${{ steps.build-image.outputs.image }}
-        tags: ${{ steps.build-image.outputs.tags }}
-        registry: ${{ env.IMAGE_REGISTRY }}
-        username: ${{ env.IMAGE_REGISTRY_USER }}
-        password: ${{ env.IMAGE_REGISTRY_PASSWORD }}
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: user/app:latest
+   
+   # https://github.com/redhat-actions/push-to-registry#readme
+    #- name: Push to registry
+     # id: push-image
+      #uses: redhat-actions/push-to-registry@v2
+      #with:
+        #image: ${{ steps.build-image.outputs.image }}
+        #tags: ${{ steps.build-image.outputs.tags }}
+        #registry: ${{ env.IMAGE_REGISTRY }}
+        #username: ${{ env.IMAGE_REGISTRY_USER }}
+        #password: ${{ env.IMAGE_REGISTRY_PASSWORD }}
 
     # The path the image was pushed to is now stored in ${{ steps.push-image.outputs.registry-path }}
 
