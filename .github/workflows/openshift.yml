@@ -29,7 +29,7 @@ name: OpenShift
 env:
 
   REGISTRY_ROOT: docker.io
-  REGISTRY: docker.io/explorertolu
+  IMAGE_REGISTRY: docker.io/explorertolu
   # ⬇️ EDIT with your registry username.
 
   # ⬇️ EDIT with your registry and registry path.
@@ -91,7 +91,7 @@ jobs:
           };
 
           const GHCR = "docker.io";
-          if (`${{ env.REGISTRY }}`.startsWith(GHCR)) {
+          if (`${{ env.IMAGE_REGISTRY }}`.startsWith(GHCR)) {
             core.info(`Image registry is ${GHCR} - no registry password required`);
           }
           else {
