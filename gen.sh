@@ -1,3 +1,3 @@
-echo "<!DOCTYPE html> <html> <title>Last Commit Message</title><body> <pre>" > html/gen.html 
-git show --summary >> html/gen.html 
-echo "</pre></body> </html>" >> html/gen.html
+echo "<!DOCTYPE html> <html> <title>Last Commit Message</title><body> <pre>" > gen.html 
+git show --summary >> gen.html 
+echo "</pre></body> </html>" >> gen.html
