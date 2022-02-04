@@ -27,6 +27,17 @@
 name: OpenShift
 
 env:
+
+  REGISTRY_ROOT: docker.io
+  REGISTRY: docker.io/explorertolu
+  # ⬇️ EDIT with your registry username.
+
+  # ⬇️ EDIT with your registry and registry path.
+  REGISTRY_USER: explorertolu
+  REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+  # ⬇️ EDIT to log into your OpenShift cluster and set up the context.
+
+  
   # 🖊️ EDIT your repository secrets to log into your OpenShift cluster and set up the context.
   # See https://github.com/redhat-actions/oc-login#readme for how to retrieve these values.
   # To get a permanent token, refer to https://github.com/redhat-actions/oc-login/wiki/Using-a-Service-Account-for-GitHub-Actions
@@ -45,9 +56,9 @@ env:
 
   # 🖊️ EDIT to change the image registry settings.
   # Registries such as GHCR, Quay.io, and Docker Hub are supported.
-  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
-  IMAGE_REGISTRY_USER: ${{ github.actor }}
-  IMAGE_REGISTRY_PASSWORD: ${{ github.token }}
+  #IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  #IMAGE_REGISTRY_USER: ${{ github.actor }}
+  #IMAGE_REGISTRY_PASSWORD: ${{ github.token }}
 
   # 🖊️ EDIT to specify custom tags for the container image, or default tags will be generated below.
   IMAGE_TAGS: ""
@@ -79,13 +90,13 @@ jobs:
             OPENSHIFT_TOKEN: `${{ secrets.OPENSHIFT_TOKEN }}`,
           };
 
-          const GHCR = "ghcr.io";
-          if (`${{ env.IMAGE_REGISTRY }}`.startsWith(GHCR)) {
+          const GHCR = "docker.io";
+          if (`${{ env.REGISTRY }}`.startsWith(GHCR)) {
             core.info(`Image registry is ${GHCR} - no registry password required`);
           }
           else {
             core.info("A registry password is required");
-            secrets["IMAGE_REGISTRY_PASSWORD"] = `${{ secrets.IMAGE_REGISTRY_PASSWORD }}`;
+            secrets["REGISTRY_PASSWORD"] = `${{ secrets.REGISTRY_PASSWORD }}`;
           }
 
           const missingSecrets = Object.entries(secrets).filter(([ name, value ]) => {
@@ -143,8 +154,8 @@ jobs:
         image: ${{ steps.build-image.outputs.image }}
         tags: ${{ steps.build-image.outputs.tags }}
         registry: ${{ env.IMAGE_REGISTRY }}
-        username: ${{ env.IMAGE_REGISTRY_USER }}
-        password: ${{ env.IMAGE_REGISTRY_PASSWORD }}
+        username: ${{ env.REGISTRY_USER }}
+        password: ${{ env.REGISTRY_PASSWORD }}
 
     # The path the image was pushed to is now stored in ${{ steps.push-image.outputs.registry-path }}
 
